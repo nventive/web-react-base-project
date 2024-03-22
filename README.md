@@ -1,9 +1,17 @@
+# How to use
+
+Run `npm i -g`
+Run `npx nventive-web-template`
+You should now see the prompts to generate a project using Vite
+
+---
+
 # Open Source Project Template
 
 This repository contains a template to seed a repository for an Open Source
 project.
 
-## How to use this template
+## How to use this templatea
 
 1. Check out this repository
 2. Delete the `.git` folder
@@ -12,6 +20,7 @@ project.
    [Open Source guidelines for publications](https://nventive.visualstudio.com/Internal/_wiki/wikis/Internal_wiki?wikiVersion=GBwikiMaster&pagePath=%2FOpen%20Source%2FPublishing&pageId=7120).
 
 ## Features (to keep as-is, configure or remove)
+
 - [Mergify](https://mergify.io/) is configured. You can edit or remove [.mergify.yml](/.mergify.yml).
 
 The following is the template for the final README.md file:
