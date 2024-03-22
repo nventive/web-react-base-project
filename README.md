@@ -11,7 +11,7 @@ You should now see the prompts to generate a project using Vite
 This repository contains a template to seed a repository for an Open Source
 project.
 
-## How to use this templatea
+## How to use this template
 
 1. Check out this repository
 2. Delete the `.git` folder
