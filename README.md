@@ -1,3 +1,32 @@
+# How to use
+
+Pre-requisites:
+
+- Node ^18.0.0 || >=20.0.0
+- Make sure yarn is installed globally
+
+Clone this projet to your machine. Navigate to the root folder of the project and run the following commands:
+
+```
+npm run build
+npm install -g
+```
+
+Now, navigate to where you want your new project to be created and run:
+
+```
+npx nventive-web-template <project-name>
+```
+
+This will do the following:
+
+- Use vite.js to create a project using the react-ts template
+- Install all dependencies for the newly created project
+- Add default libraries used by nventive (MUI, react router, i18next, etc.) to the project's dependencies
+- Update the project's code to setup these base libraries
+
+---
+
 # Open Source Project Template
 
 This repository contains a template to seed a repository for an Open Source
@@ -12,6 +41,7 @@ project.
    [Open Source guidelines for publications](https://nventive.visualstudio.com/Internal/_wiki/wikis/Internal_wiki?wikiVersion=GBwikiMaster&pagePath=%2FOpen%20Source%2FPublishing&pageId=7120).
 
 ## Features (to keep as-is, configure or remove)
+
 - [Mergify](https://mergify.io/) is configured. You can edit or remove [.mergify.yml](/.mergify.yml).
 
 The following is the template for the final README.md file:
