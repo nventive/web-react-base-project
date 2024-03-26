@@ -8,14 +8,15 @@ Pre-requisites:
 Clone this projet to your machine. Navigate to the root folder of the project and run the following commands:
 
 ```
-npm run build
-npm install -g
+yarn
+yarn build
+yarn global add file:$PWD # equivalent to npm install -g
 ```
 
 Now, navigate to where you want your new project to be created and run:
 
 ```
-npx nventive-web-template <project-name>
+create-nventive-app <project-name>
 ```
 
 This will do the following:
