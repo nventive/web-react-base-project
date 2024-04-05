@@ -7,6 +7,19 @@ Pre-requisites:
 
 Clone this projet to your machine. Navigate to the root folder of the project and run the following commands:
 
+Run `yarn install` to download needed packages
+
+## How to run npx package locally
+
+### With NPN (easier)
+
+```
+npm i -g
+npx create-nventive-app <project-name>
+```
+
+### With Yarn
+
 ```
 yarn
 yarn build
@@ -27,6 +40,10 @@ This will do the following:
 - Update the project's code to setup these base libraries
 
 ---
+
+## Making changes
+
+Everytime you make a change and want to test it out, you need to run `yarn build`
 
 # Open Source Project Template
 
