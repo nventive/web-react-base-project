@@ -1,0 +1,41 @@
+{
+  "name": "create-nventive-app",
+  "version": "1.0.0",
+  "description": "Official nventive package runner for starting a React project",
+  "type": "module",
+  "license": "ISC",
+  "author": "nventive",
+  "bin": {
+    "create-nventive-app": "index.js"
+  },
+  "files": [
+    "index.js",
+    "templates",
+    "dist"
+  ],
+  "scripts": {
+    "dev": "unbuild --stub",
+    "build": "unbuild",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": "^18.0.0 || >=20.0.0"
+  },
+  "repository": {
+    "url": "https://github.com/nventive/web-react-base-project",
+    "type": "git"
+  },
+  "contributors": [
+    "Charles Héon <charles_heon@hotmail.com> (https://github.com/ChuckLeon)",
+    "Luis Doebbel <luiskd@gmail.com> (https://github.com/luisdlopez)"
+  ],
+  "devDependencies": {
+    "@types/minimist": "^1.2.5",
+    "kolorist": "^1.8.0",
+    "minimist": "^1.2.8",
+    "prettier": "3.2.5",
+    "typescript": "^5.4.3",
+    "unbuild": "^2.0.0"
+  },
+  "dependencies": {}
+}
