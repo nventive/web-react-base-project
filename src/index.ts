@@ -1,8 +1,8 @@
 import minimist from "minimist";
-import { green, red } from "kolorist";
 import { createBaseProject } from "./base-project-creation";
 import { installDependencies } from "./base-project-dependencies-installation";
 import { copyTemplateFiles } from "./template-copy";
+import inquirer from "inquirer";
 
 const argv = minimist<{
   t?: string;
@@ -10,12 +10,23 @@ const argv = minimist<{
 }>(process.argv.slice(2), { string: ["_"] });
 
 const run = async () => {
-  const targetDir = formatTargetDir(argv._[0]);
+  let targetDir = formatTargetDir(argv._[0]);
 
   if (!targetDir) {
-    console.error(red("\nPlease specify the project directory:"));
-    console.error(`  ${green("yarn create vite <project-directory>")}}\n`);
-    return;
+    const directoryNamePrompt = await inquirer.prompt([
+      {
+        type: "input",
+        name: "value",
+        message: "Project directory name?",
+        validate: (value: string) => {
+          if (formatTargetDir(value) === "")
+            return "Please enter a valid project directory name";
+
+          return true;
+        },
+      },
+    ]);
+    targetDir = formatTargetDir(directoryNamePrompt.value);
   }
 
   await createBaseProject(targetDir);
@@ -23,7 +34,7 @@ const run = async () => {
   await copyTemplateFiles(targetDir);
 };
 
-function formatTargetDir(targetDir: string | undefined) {
+function formatTargetDir(targetDir: string) {
   return targetDir?.trim().replace(/\/+$/g, "");
 }
 

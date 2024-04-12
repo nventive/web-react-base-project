@@ -7,6 +7,19 @@ Pre-requisites:
 
 Clone this projet to your machine. Navigate to the root folder of the project and run the following commands:
 
+Run `yarn install` to download needed packages
+
+## How to run npx package locally
+
+### With NPN (easier)
+
+```
+npm i -g
+npx create-nventive-app <project-name>
+```
+
+### With Yarn
+
 ```
 yarn
 yarn build
@@ -25,6 +38,12 @@ This will do the following:
 - Install all dependencies for the newly created project
 - Add default libraries used by nventive (MUI, react router, i18next, etc.) to the project's dependencies
 - Update the project's code to setup these base libraries
+
+**_NOTE:_** This works on mac correctly, but we still have issues with the windows version. Yarn recommend to not install it globally and use Nodes corepack instead.
+
+## Making changes
+
+Everytime you make a change and want to test it out, you need to run `yarn build`
 
 ---
 
