@@ -1,0 +1,51 @@
+parameters:
+  - name: environment
+    type: string
+  - name: apiUrl
+    type: string
+  - name: cookieDomain
+    type: string
+  - name: generateSourcemap
+    type: boolean
+    default: false
+  - name: workingDir
+    type: string
+    default: "$(System.DefaultWorkingDirectory)"
+  - name: azureStaticWebAppsApiToken
+    type: string
+  - name: frontDoorId
+    type: string
+  - name: showDebugBar
+    type: string
+    default: "false"
+
+jobs:
+  - deployment: DeployFrontEnd
+    displayName: "Build and Publish [${{ parameters.environment }}]"
+    environment: asmbl-webapp-${{ parameters.environment }}
+    pool:
+      vmImage: "ubuntu-22.04"
+    variables:
+      - name: VITE_ENV
+        value: "${{ parameters.environment }}"
+      - name: VITE_API_URL
+        value: "${{ parameters.apiUrl }}"
+      - name: VITE_AUTH_COOKIE_DOMAIN
+        value: "${{ parameters.cookieDomain }}"
+      - name: GENERATE_SOURCEMAP
+        value: ${{ parameters.generateSourcemap }}
+      - name: VITE_DEBUG_BAR
+        value: "${{ parameters.showDebugBar }}"
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            - task: AzureStaticWebApp@0
+              inputs:
+                workingDirectory: ${{ parameters.workingDir }}
+                app_location: "."
+                output_location: "build"
+                verbose: true
+                azure_static_web_apps_api_token: ${{ parameters.azureStaticWebAppsApiToken }}

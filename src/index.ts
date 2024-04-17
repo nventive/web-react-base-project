@@ -1,7 +1,7 @@
 import minimist from "minimist";
 import { createBaseProject } from "./base-project-creation";
 import { installDependencies } from "./base-project-dependencies-installation";
-import { copyTemplateFiles } from "./template-copy";
+import { copyAzurePipelinesFiles, copyTemplateFiles } from "./template-copy";
 import inquirer from "inquirer";
 
 const argv = minimist<{
@@ -32,6 +32,7 @@ const run = async () => {
   await createBaseProject(targetDir);
   await installDependencies(targetDir);
   await copyTemplateFiles(targetDir);
+  await copyAzurePipelinesFiles(targetDir);
 };
 
 function formatTargetDir(targetDir: string) {

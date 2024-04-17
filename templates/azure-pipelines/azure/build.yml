@@ -1,0 +1,67 @@
+parameters:
+  - name: environment
+    type: string
+  - name: apiUrl
+    type: string
+  - name: cookieDomain
+    type: string
+  - name: generateSourcemap
+    type: boolean
+    default: false
+  - name: workingDir
+    type: string
+    default: "$(System.DefaultWorkingDirectory)"
+  - name: depends_on
+    type: object
+    default: ""
+  - name: publishArtifact
+    type: string
+    default: true
+  - name: showDebugBar
+    type: string
+    default: "false"
+
+jobs:
+  - job: BuildFrontend_${{ parameters.environment }}
+    ${{ if ne(parameters.depends_on, '')}}:
+      dependsOn: ${{ parameters.depends_on }}
+    displayName: "Build Frontend [${{ parameters.environment }}]"
+    pool:
+      vmImage: "ubuntu-latest"
+    variables:
+      - name: VITE_ENV
+        value: "${{ parameters.environment }}"
+      - name: VITE_API_URL
+        value: "${{ parameters.apiUrl }}"
+      - name: VITE_AUTH_COOKIE_DOMAIN
+        value: "${{ parameters.cookieDomain }}"
+      - name: GENERATE_SOURCEMAP
+        value: ${{ parameters.generateSourcemap }}
+      - name: VITE_DEBUG_BAR
+        value: "${{ parameters.showDebugBar }}"
+
+    steps:
+      - task: NodeTool@0
+        displayName: "Node.js Version"
+        inputs:
+          versionSpec: "16.x"
+
+      - script: |
+          npm install -g yarn
+          yarn
+          yarn build
+        displayName: "Install and Build using Yarn - React"
+
+      - task: CopyFiles@2
+        displayName: "Copy files to build folder"
+        inputs:
+          SourceFolder: "${{ parameters.workingDir }}/build"
+          TargetFolder: "$(build.artifactstagingdirectory)"
+          CleanTargetFolder: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish React build to artifact"
+        condition: eq(${{ parameters.publishArtifact }}, true)
+        inputs:
+          pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+          ArtifactName: "buildfrontend_${{ parameters.environment }}"

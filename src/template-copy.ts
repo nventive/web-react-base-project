@@ -20,6 +20,11 @@ function copy(src: string, dest: string) {
   }
 }
 
+const write = (file: string, root: any, templateDir: any) => {
+  const targetPath = path.join(root, file);
+  copy(path.join(templateDir, file), targetPath);
+};
+
 export const copyTemplateFiles = (targetDir: string) => {
   const cwd = process.cwd();
   const root = path.join(cwd, targetDir);
@@ -30,13 +35,24 @@ export const copyTemplateFiles = (targetDir: string) => {
     `templates/react-ts-mui`
   );
 
-  const write = (file: string) => {
-    const targetPath = path.join(root, file);
-    copy(path.join(templateDir, file), targetPath);
-  };
+  const files = fs.readdirSync(templateDir);
+  for (const file of files) {
+    write(file, root, templateDir);
+  }
+};
+
+export const copyAzurePipelinesFiles = (targetDir: string) => {
+  const cwd = process.cwd();
+  const root = path.join(cwd, targetDir);
+
+  const templateDir = path.resolve(
+    fileURLToPath(import.meta.url),
+    "../..",
+    `templates/azure-pipelines`
+  );
 
   const files = fs.readdirSync(templateDir);
   for (const file of files) {
-    write(file);
+    write(file, root, templateDir);
   }
 };
