@@ -27,7 +27,7 @@ export const copyTemplateFiles = (targetDir: string) => {
   const templateDir = path.resolve(
     fileURLToPath(import.meta.url),
     "../..",
-    `templates/react-ts-mui`
+    `templates/react-i18next`
   );
 
   const write = (file: string) => {

@@ -2,10 +2,13 @@ import { spawn } from "node:child_process";
 
 const DEPENDENCIES = [
   "prettier", // TODO: add it as a dev dependency
-  "@mui/material@5.15.14 @emotion/react@11.11.4 @emotion/styled@11.11.0", // MUI
+  "@mui/material@^5.15.14 @emotion/react@11.11.4 @emotion/styled@^11.11.0", // MUI
   // or we could get it from https://fonts.googleapis.com
   // "@fontsource/roboto", // Font used by MUI
-  "@mui/icons-material@5.15.14", // MUI icons
+  "@mui/icons-material@^5.15.14", // MUI icons
+  "react-router-dom@^6.22.3",
+  "react-i18next@^14.1.0 i18next@^23.11.2",
+  "i18next-http-backend@^2.5.1 i18next-browser-languagedetector@^7.2.1",
 ];
 
 export const installDependencies: (targetDir: string) => Promise<string> = (
