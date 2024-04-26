@@ -3,33 +3,25 @@
 Pre-requisites:
 
 - Node ^18.0.0 || >=20.0.0
-- Make sure yarn is installed globally
+- Yarn >= 4.1.1
 
-Clone this projet to your machine. Navigate to the root folder of the project and run the following commands:
+**_NOTE:_** since Yarn 2+ and Node 18+, Yarn is included with Node and is not made to be installed globally. Use [Node's Corepack](https://nodejs.org/api/corepack.html) feature to be able to use it:
+
+```
+corepack enable
+corepack enable yarn
+```
+
+Clone this project to your machine. Navigate to the root folder of the project and run the following commands:
 
 Run `yarn install` to download needed packages
 
-## How to run npx package locally
-
-### With NPN (easier)
-
-```
-npm i -g
-npx create-nventive-app <project-name>
-```
-
-### With Yarn
+## How to run your package locally
 
 ```
 yarn
 yarn build
-yarn global add file:$PWD # equivalent to npm install -g
-```
-
-Now, navigate to where you want your new project to be created and run:
-
-```
-create-nventive-app <project-name>
+node ./dist/index.mjs
 ```
 
 This will do the following:
@@ -39,11 +31,14 @@ This will do the following:
 - Add default libraries used by nventive (MUI, react router, i18next, etc.) to the project's dependencies
 - Update the project's code to setup these base libraries
 
-**_NOTE:_** This works on mac correctly, but we still have issues with the windows version. Yarn recommend to not install it globally and use Nodes corepack instead.
-
 ## Making changes
 
-Everytime you make a change and want to test it out, you need to run `yarn build`
+Everytime you make a change and want to test it out, you need to run
+
+```
+yarn build
+node ./dist/index.mjs
+```
 
 ---
 

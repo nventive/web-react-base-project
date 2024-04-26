@@ -9,6 +9,7 @@ export const createBaseProject: (targetDir: string) => Promise<string> = (
 
     const childProcess = spawn(command, args, {
       stdio: "inherit",
+      shell: true
     });
 
     childProcess.on("error", (error) => {
