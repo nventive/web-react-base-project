@@ -1,0 +1,68 @@
+trigger:
+  - releases/*
+
+name: v0.01$(Rev:.rr)
+
+# Library REQUIRED VARIABLES
+
+# ------------------------------------------------------
+# azure-variables
+# ------------------------------------------------------
+# PROJECT_SHORT_NAME
+# ARM_TENANT_ID
+# ARM_OBJECT_ID
+# ARM_SERVICE_PRINCIPAL_NAME
+
+# ------------------------------------------------------
+# vault_{ environment }
+# ------------------------------------------------------
+# api-url-{ environment }
+# ga-tracking-id-{ environment }
+
+variables:
+  - group: azure-variables
+  - name: environments
+    type: object
+    value:
+      - dev
+      - qa
+      - uat
+      - staging
+      - prod
+
+stages:
+  - ${{ each environment in parameters.environments }}:
+      - stage: "Deploy_${{ environment }}"
+        displayName: "Deploy [${{ environment }}]"
+        variables:
+          - group: "vault_${{ environment }}"
+          - name: commandOptions
+            value: >
+              --var-file=env/${{ environment }}.tfvars
+              -var="project_short_name=$(PROJECT_SHORT_NAME)"
+              -var="tenant_id=$(ARM_TENANT_ID)"
+              -var="object_id=$(ARM_OBJECT_ID)"
+              -input=false
+        jobs:
+          - template: terraform_plan.yml
+            parameters:
+              environment: ${{ environment }}
+              commandOptions: ${{ variables.commandOptions }}
+          - template: build_frontend.yml
+            parameters:
+              environment: ${{ environment }}
+          - ${{ if eq(environment, 'prod') }}:
+              - template: deploy_validation.yml
+                parameters:
+                  environment: ${{ environment }}
+                  depends_on:
+                    - Terraform_Plan_${{ environment }}
+          - template: deploy.yml
+            parameters:
+              environment: ${{ environment }}
+              commandOptions: ${{ variables.commandOptions }}
+              depends_on:
+                - ${{ if eq(environment, 'prod') }}:
+                    - Deploy_Validation_${{ environment }}
+                - Terraform_Plan_${{ environment }}
+                - Build_Frontend_${{ environment }}

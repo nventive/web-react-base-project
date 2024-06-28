@@ -1,0 +1,47 @@
+parameters:
+  - name: environment
+    type: string
+  - name: commandOptions
+    type: string
+  - name: depends_on
+    type: object
+    default: ""
+
+jobs:
+  - deployment: "Deploy_${{ parameters.environment }}"
+    displayName: "Deploy [${{ parameters.environment }}]"
+    environment: ${{ parameters.environment }}
+    pool:
+      vmImage: "windows-latest"
+    ${{ if ne(parameters.depends_on, '')}}:
+      dependsOn: ${{ parameters.depends_on }}
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+
+            - template: terraform_steps.yml
+              parameters:
+                environment: ${{ parameters.environment }}
+                commandOptions: ${{ parameters.commandOptions }}
+                lastCommand: "apply"
+
+            - task: AzureFileCopy@5
+              displayName: "Deploy React build to Azure Storage"
+              inputs:
+                sourcePath: "$(Pipeline.Workspace)/build_frontend_${{ parameters.environment }}"
+                azureSubscription: "$(ARM_SERVICE_PRINCIPAL_NAME)"
+                destination: azureBlob
+                storage: sa$(PROJECT_SHORT_NAME)webapp${{ parameters.environment }}
+                containerName: "$web"
+
+            - task: AzureCLI@2
+              displayName: "Purge CDN after React build deployment"
+              inputs:
+                azureSubscription: "$(ARM_SERVICE_PRINCIPAL_NAME)"
+                scriptType: ps
+                scriptLocation: "inlineScript"
+                inlineScript: |
+                  az cdn endpoint purge -g rg-$(PROJECT_SHORT_NAME)-${{ parameters.environment }} -n cdne-$(PROJECT_SHORT_NAME)-${{ parameters.environment }} --profile-name cdnp-$(PROJECT_SHORT_NAME)-${{ parameters.environment }} --content-paths '/*' --no-wait

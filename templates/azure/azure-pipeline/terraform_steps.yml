@@ -1,0 +1,40 @@
+parameters:
+  - name: environment
+    type: string
+  - name: commandOptions
+    type: string
+  - name: lastCommand
+    type: string
+
+steps:
+  - task: TerraformInstaller@0
+    displayName: "Terraform Install"
+    inputs:
+      terraformVersion: "1.9.0"
+
+  - task: TerraformTaskV2@2
+    displayName: "Terraform Initialize"
+    inputs:
+      provider: "azurerm"
+      command: "init"
+      workingDirectory: $(System.DefaultWorkingDirectory)/terraform
+      backendServiceArm: $(ARM_SERVICE_PRINCIPAL_NAME)
+      backendAzureRmResourceGroupName: "rg-global-$(PROJECT_SHORT_NAME)"
+      backendAzureRmStorageAccountName: "tfstorage"
+      backendAzureRmContainerName: "tfstate"
+      backendAzureRmKey: "${{ parameters.environment }}.tfstate"
+
+  - task: TerraformTaskV2@2
+    displayName: "Terraform Validate"
+    inputs:
+      provider: "azurerm"
+      command: "validate"
+
+  - task: TerraformTaskV2@2
+    displayName: "Terraform ${{ parameters.lastCommand }}"
+    inputs:
+      provider: "azurerm"
+      command: ${{ parameters.lastCommand }}
+      commandOptions: "${{ parameters.commandOptions }}"
+      workingDirectory: "$(System.DefaultWorkingDirectory)/terraform"
+      environmentServiceNameAzureRm: $(ARM_SERVICE_PRINCIPAL_NAME)
